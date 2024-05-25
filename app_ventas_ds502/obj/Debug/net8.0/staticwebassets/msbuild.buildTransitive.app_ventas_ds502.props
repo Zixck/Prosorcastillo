@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\app_ventas_ds502.props" />
+</Project>
