@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("app_ventas_ds502")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec06eebd61d7dd26dd2ed46a6b5e3f39c897b716")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+60eb1e428986b9abe4651bdb5e62c202c5b57ec8")]
 [assembly: System.Reflection.AssemblyProductAttribute("app_ventas_ds502")]
 [assembly: System.Reflection.AssemblyTitleAttribute("app_ventas_ds502")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
