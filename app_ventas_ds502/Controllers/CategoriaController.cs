@@ -24,7 +24,7 @@ namespace app_ventas_ds502.Controllers
         [HttpGet]
         public JsonResult Listar()
         {
-            string cad_sql = "SELECT * FROM ar_categoria";
+            string cad_sql = "exec sp_ListarCategoria";
             List<Categoria> arr_categoria = _context.Categorias.FromSqlRaw(cad_sql).ToList();
             return Json(new { data = arr_categoria });
         }
@@ -32,7 +32,7 @@ namespace app_ventas_ds502.Controllers
         [HttpGet]
         public JsonResult Consultar(string codigo_categoria)
         {
-            string cad_sql = "SELECT * FROM ar_categoria WHERE codigo_categoria = @codigo_categoria";
+            string cad_sql = "sp_ConsultarCategoria";
             Categoria categoria = _context.Categorias.FromSqlRaw(cad_sql, new SqlParameter("@codigo_categoria", codigo_categoria)).FirstOrDefault();
             return Json(categoria);
         }
