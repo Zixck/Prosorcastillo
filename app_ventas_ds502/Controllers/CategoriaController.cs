@@ -2,6 +2,7 @@ using app_ventas_ds502.Data;
 using app_ventas_ds502.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace app_ventas_ds502.Controllers
