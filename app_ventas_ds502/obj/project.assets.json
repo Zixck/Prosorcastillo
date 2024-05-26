@@ -7760,23 +7760,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Fabricio\\.nuget\\packages\\": {},
+    "C:\\Users\\demig\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Fabricio\\source\\repos\\sol_ventas_ds502V2\\app_ventas_ds502\\app_ventas_ds502.csproj",
+      "projectUniqueName": "D:\\demig\\Escritorio\\Prosorcastillo\\app_ventas_ds502\\app_ventas_ds502.csproj",
       "projectName": "app_ventas_ds502",
-      "projectPath": "C:\\Users\\Fabricio\\source\\repos\\sol_ventas_ds502V2\\app_ventas_ds502\\app_ventas_ds502.csproj",
-      "packagesPath": "C:\\Users\\Fabricio\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Fabricio\\source\\repos\\sol_ventas_ds502V2\\app_ventas_ds502\\obj\\",
+      "projectPath": "D:\\demig\\Escritorio\\Prosorcastillo\\app_ventas_ds502\\app_ventas_ds502.csproj",
+      "packagesPath": "C:\\Users\\demig\\.nuget\\packages\\",
+      "outputPath": "D:\\demig\\Escritorio\\Prosorcastillo\\app_ventas_ds502\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Fabricio\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\demig\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -7837,7 +7837,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
