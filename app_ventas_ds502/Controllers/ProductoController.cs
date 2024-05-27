@@ -3,9 +3,7 @@ using app_ventas_ds502.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 
 namespace app_ventas_ds502.Controllers
 {
