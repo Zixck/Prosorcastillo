@@ -1,0 +1,187 @@
+@model app_ventas_ds502.Models.Pedido
+
+@{
+    ViewData["Title"] = "Listado de Pedidos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section EstiloDT {
+    <link rel="stylesheet" href="~/lib/datatables.net/css/jquery.dataTables.min.css" />
+}
+
+<h1><i class="fas fa-list"></i> Listado de Pedidos</h1>
+<hr />
+
+<div class="container">
+    <div class="row mt-3">
+        <table id="ar_pedido" class="table table-striped display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.codigo_pedido)</th>
+                    <th>@Html.DisplayNameFor(model => model.fecha)</th>
+                    <th>@Html.DisplayNameFor(model => model.codigo_cliente)</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="Formulario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="FormularioLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="FormularioLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form_pedido">
+                    <div class="form-group">
+                        <label asp-for="codigo_pedido" class="control-label"></label>
+                        <input asp-for="codigo_pedido" class="form-control" id="codigo_pedido" />
+                        <span asp-validation-for="codigo_pedido" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="fecha" class="control-label"></label>
+                        <input asp-for="fecha" class="form-control" id="fecha" />
+                        <span asp-validation-for="fecha" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="codigo_cliente" class="control-label"></label>
+                        <input asp-for="codigo_cliente" class="form-control" id="codigo_cliente" />
+                        <span asp-validation-for="codigo_cliente" class="text-danger"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn_cerrar" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="far fa-window-close"></i> Cerrar
+                </button>
+                <button type="button" id="btn_grabar" class="btn btn-outline-primary">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/lib/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var table = $("#ar_pedido").DataTable({
+                "ajax": {
+                    "url": "@Url.Action("Listar", "Pedido")",
+                    "type": "GET",
+                    "dataType": "json"
+                },
+                "columns": [
+                    { "data": "codigo_pedido" },
+                    { "data": "fecha", "render": function (data) {
+                        return new Date(data).toLocaleDateString(); // Formato de fecha
+                    }},
+                    { "data": "codigo_cliente" },
+                    {
+                        "data": "codigo_pedido", "render": function (data) {
+                            return "<button class='btn btn-outline-success' type='button' onclick='AbrirRegistro(\"" + data + "\")'><i class='far fa-edit'></i></button>" +
+                                "<button class='btn btn-outline-danger' type='button' onclick='Eliminar(\"" + data + "\")'><i class='far fa-trash-alt'></i></button>"
+                        },
+                        "orderable": false,
+                        "searchable": false
+                    }
+                ],
+                "order": [[1, "asc"]],
+                "dom": "Bfrtip",
+                "buttons": [
+                    {
+                        text: "Registrar Pedido",
+                        attr: { class: "btn btn-outline-primary" },
+                        action: function () {
+                            AbrirRegistro("")
+                        }
+                    }
+                ]
+            });
+        });
+
+        function AbrirRegistro(codigo_pedido) {
+            if (codigo_pedido != "") {
+                $.ajax({
+                    url: "@Url.Action("Consultar", "Pedido")" + "?codigo_pedido=" + codigo_pedido,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data != null) {
+                            $("#codigo_pedido").prop("readonly", true);
+                            $("#codigo_pedido").val(data.codigo_pedido);
+                            $("#fecha").val(new Date(data.fecha).toISOString().slice(0, 10)); // Formato de fecha para el input
+                            $("#codigo_cliente").val(data.codigo_cliente);
+                        }
+                    }
+                });
+                $("#FormularioLabel").text("Editar Pedido");
+                $("#btn_grabar").html("<i class='fas fa-save'></i> Guardar cambios");
+            } else {
+                $("#codigo_pedido").prop("readonly", false);
+                $("#form_pedido")[0].reset();
+                $("#FormularioLabel").text("Registrar Pedido");
+                $("#btn_grabar").html("<i class='fas fa-save'></i> Guardar datos");
+            }
+            $("#Formulario").modal("show");
+        }
+
+        $("#btn_grabar").click(function () {
+            var pedido = {
+                codigo_pedido: $("#codigo_pedido").val(),
+                fecha: $("#fecha").val(),
+                codigo_cliente: $("#codigo_cliente").val()
+            };
+
+            $.ajax({
+                url: "@Url.Action("Grabar", "Pedido")",
+                type: "POST",
+                data: JSON.stringify(pedido),
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.resultado) {
+                        $("#ar_pedido").DataTable().ajax.reload();
+                        $("#Formulario").modal("hide");
+                    } else {
+                        alert("No fue posible grabar la información");
+                    }
+                },
+                error: function (error) {
+                    alert(error.responseText);
+                }
+            });
+        });
+
+        function Eliminar(codigo_pedido) {
+            if (confirm("¿Seguro de eliminar?")) {
+                $.ajax({
+                    url: "@Url.Action("Borrar", "Pedido")" + "?codigo_pedido=" + codigo_pedido,
+                    type: "GET",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        if (data.resultado) {
+                            $("#ar_pedido").DataTable().ajax.reload();
+                        } else {
+                            alert("No fue posible eliminar la información");
+                        }
+                    },
+                    error: function (error) {
+                        alert(error.responseText);
+                    }
+                });
+            }
+        }
+    </script>
+}
