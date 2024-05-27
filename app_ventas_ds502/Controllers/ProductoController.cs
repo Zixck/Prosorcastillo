@@ -24,7 +24,7 @@ namespace app_ventas_ds502.Controllers
         [HttpGet]
         public JsonResult Listar()
         {
-            string cad_sql = "EXEC sp_ListarProducto";
+            string cad_sql = "exec sp_ListarProducto";
             List<Producto> arr_producto = _context.Productos.FromSqlRaw(cad_sql).ToList();
             return Json(new { data = arr_producto });
         }
@@ -32,7 +32,7 @@ namespace app_ventas_ds502.Controllers
         [HttpGet]
         public JsonResult Consultar(string codigo_producto)
         {
-            string cad_sql = "EXEC sp_ConsultarProducto @codigo_producto";
+            string cad_sql = "exec sp_ConsultarProducto";
             Producto producto = _context.Productos.FromSqlRaw(cad_sql, new SqlParameter("@codigo_producto", codigo_producto)).FirstOrDefault();
             return Json(producto);
         }
