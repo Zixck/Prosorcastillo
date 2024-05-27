@@ -1,44 +1,39 @@
-﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace app_ventas_ds502.Models
 {
-    [Table("tb_producto")]
+    [Table("ar_producto")]
     public class Producto
     {
         [Key]
-        [Required(ErrorMessage = "Ingrese el código del producto")]
-        [StringLength(5)]
-        [Display(Name = "Código del Producto")]
+        [Required(ErrorMessage = "El código del producto es obligatorio")]
+        [StringLength(5, ErrorMessage = "El código del producto no puede exceder los 5 caracteres")]
+        [Display(Name = "Código de Producto")]
         public string codigo_producto { get; set; }
 
-        [Required(ErrorMessage = "Ingrese el nombre del producto")]
-        [StringLength(40)]
+        [Required(ErrorMessage = "El nombre del producto es obligatorio")]
+        [StringLength(40, ErrorMessage = "El nombre del producto no puede exceder los 40 caracteres")]
         [Display(Name = "Producto")]
         public string producto { get; set; }
+
+        [StringLength(3, ErrorMessage = "La talla del producto no puede exceder los 3 caracteres")]
+        [Display(Name = "Talla")]
+        public string talla { get; set; }
 
         [Display(Name = "Stock Disponible")]
         public int stock_disponible { get; set; }
 
-        [Required(ErrorMessage = "Ingrese el costo del producto")]
-        [Column(TypeName = "decimal(18, 2)")]
         [Display(Name = "Costo")]
-        public decimal costo { get; set; }
+        public float costo { get; set; }
 
-        [Required(ErrorMessage = "Ingrese la ganancia del producto")]
-        [Column(TypeName = "decimal(18, 2)")]
         [Display(Name = "Ganancia")]
-        public decimal ganancia { get; set; }
+        public float ganancia { get; set; }
 
-        [Required(ErrorMessage = "Ingrese el código de marca del producto")]
-        [StringLength(5)]
-        [Display(Name = "Código de Marca")]
-        public string producto_codigo_marca { get; set; }
-
-        [Required(ErrorMessage = "Ingrese el código de categoría del producto")]
-        [StringLength(5)]
         [Display(Name = "Código de Categoría")]
-        public string producto_codigo_categoria { get; set; }
+        [ForeignKey("Categoria")]
+        public string codigo_categoria { get; set; }
+
+        public virtual Categoria Categoria { get; set; }
     }
 }
