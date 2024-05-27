@@ -32,7 +32,7 @@ namespace app_ventas_ds502.Controllers
         [HttpGet]
         public JsonResult Consultar(string codigo_pedido)
         {
-            string cad_sql = "exec sp_ConsultarPedido @codigo_pedido";
+            string cad_sql = "exec sp_ConsultarPedido";
             Pedido pedido = _context.Pedidos.FromSqlRaw(cad_sql, new SqlParameter("@codigo_pedido", codigo_pedido)).FirstOrDefault();
             return Json(pedido);
         }
