@@ -1,68 +1,222 @@
-﻿@model IEnumerable<app_ventas_ds502.Models.Producto>
+@model app_ventas_ds502.Models.Producto
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Listado de Productos";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Listado de Producto</h1>
-<hr/>
+@section EstiloDT {
+    <link rel="stylesheet" href="~/lib/datatables.net/css/jquery.dataTables.min.css" />
+}
+
+<h1><i class="fas fa-list"></i> Listado de Productos</h1>
+<hr />
 
 <div class="container">
-    <div class="row">
-        <div class="col-sm-3">
-            <a class="btn btn-success" asp-controller="Producto"
-            asp-action="Create">Agregar Producto</a>
-        </div>
-    </div>
-
-    <br/>
-
-    <div class="container">
-    <div class="row">
-        @if (Model.Count() > 0)
-        {
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <td>@Html.DisplayNameFor(pro => pro.codigo_producto)</td>
-                        <td>@Html.DisplayNameFor(pro => pro.producto)</td>
-                        <td>@Html.DisplayNameFor(pro => pro.stock_disponible)</td>
-                        <td>@Html.DisplayNameFor(pro => pro.costo)</td>
-                        <td>@Html.DisplayNameFor(pro => pro.ganancia)</td>
-                        <td>@Html.DisplayNameFor(pro => pro.producto_codigo_marca)</td>
-                        <td>@Html.DisplayNameFor(pro => pro.producto_codigo_categoria)</td>
-                        <td>Acciones</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var reg in Model)
-                    {
-                        <tr>
-                            <td>@reg.codigo_producto</td>
-                            <td>@reg.producto</td>
-                            <td>@reg.stock_disponible</td>            
-                            <td>@reg.costo</td>
-                            <td>@reg.ganancia</td>
-                            <td>@reg.producto_codigo_marca</td>
-                            <td>@reg.producto_codigo_categoria</td>
-                            <td>
-                                <a asp-controller="Producto" asp-action="Edit"
-                                   asp-route-id="@reg.codigo_producto"
-                                   class="btn btn-outline-warning btn-sm"><i class="far fa-edit"></i>Editar</a>
-
-                                <a asp-controller="Producto" asp-action="Delete"
-                                   asp-route-id="@reg.codigo_producto"
-                                   class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i>Borrar</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
-        else
-        {
-            <p>No existen registros</p>
-        }
+    <div class="row mt-3">
+        <table id="ar_producto" class="table table-striped display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.codigo_producto)</th>
+                    <th>@Html.DisplayNameFor(model => model.producto)</th>
+                    <th>@Html.DisplayNameFor(model => model.talla)</th>
+                    <th>@Html.DisplayNameFor(model => model.stock_disponible)</th>
+                    <th>@Html.DisplayNameFor(model => model.costo)</th>
+                    <th>@Html.DisplayNameFor(model => model.ganancia)</th>
+                    <th>@Html.DisplayNameFor(model => model.codigo_categoria)</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
     </div>
 </div>
 
+<div class="modal fade" id="Formulario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="FormularioLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="FormularioLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form_producto">
+                    <div class="form-group">
+                        <label asp-for="codigo_producto" class="control-label"></label>
+                        <input asp-for="codigo_producto" class="form-control" id="codigo_producto" />
+                        <span asp-validation-for="codigo_producto" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="producto" class="control-label"></label>
+                        <input asp-for="producto" class="form-control" id="producto" />
+                        <span asp-validation-for="producto" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="talla" class="control-label"></label>
+                        <input asp-for="talla" class="form-control" id="talla" />
+                        <span asp-validation-for="talla" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="stock_disponible" class="control-label"></label>
+                        <input asp-for="stock_disponible" class="form-control" id="stock_disponible" />
+                        <span asp-validation-for="stock_disponible" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="costo" class="control-label"></label>
+                        <input asp-for="costo" class="form-control" id="costo" />
+                        <span asp-validation-for="costo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ganancia" class="control-label"></label>
+                        <input asp-for="ganancia" class="form-control" id="ganancia" />
+                        <span asp-validation-for="ganancia" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="codigo_categoria" class="control-label"></label>
+                        <input asp-for="codigo_categoria" class="form-control" id="codigo_categoria" />
+                        <span asp-validation-for="codigo_categoria" class="text-danger"></span>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btn_cerrar" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="far fa-window-close"></i> Cerrar
+                </button>
+                <button type="button" id="btn_grabar" class="btn btn-outline-primary">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery/jquery.js"></script>
+    <script src="~/lib/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/lib/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var table = $("#ar_producto").DataTable({
+            "ajax": {
+                "url": "@Url.Action("Listar", "Producto")",
+                "type": "GET",
+                "dataType": "json"
+            },
+            "columns": [
+                { "data": "codigo_producto" },
+                { "data": "producto" },
+                { "data": "talla" },
+                { "data": "stock_disponible" },
+                { "data": "costo" },
+                { "data": "ganancia" },
+                { "data": "codigo_categoria" },
+                {
+                    "data": "codigo_producto", "render": function (data) {
+                        return "<button class='btn btn-outline-success' type='button' onclick='AbrirRegistro(\"" + data + "\")'><i class='far fa-edit'></i></button>" +
+                            "<button class='btn btn-outline-danger' type='button' onclick='Eliminar(\"" + data + "\")'><i class='far fa-trash-alt'></i></button>"
+                    },
+                    "orderable": false,
+                    "searchable": false
+                }
+            ],
+            "order": [[1, "asc"]],
+            "dom": "Bfrtip",
+            "buttons": [
+                {
+                    text: "Registrar Producto",
+                    attr: { class: "btn btn-outline-primary" },
+                    action: function () {
+                        AbrirRegistro("")
+                    }
+                }
+            ]
+        });
+    });
+
+    function AbrirRegistro(codigo_producto) {
+        if (codigo_producto != "") {
+            $.ajax({
+                url: "@Url.Action("Consultar", "Producto")" + "?codigo_producto=" + codigo_producto,
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data != null) {
+                        $("#codigo_producto").prop("readonly", true);
+                        $("#codigo_producto").val(data.codigo_producto);
+                        $("#producto").val(data.producto);
+                        $("#talla").val(data.talla);
+                        $("#stock_disponible").val(data.stock_disponible);
+                        $("#costo").val(data.costo);
+                        $("#ganancia").val(data.ganancia);
+                        $("#codigo_categoria").val(data.codigo_categoria);
+                    }
+                }
+            });
+            $("#FormularioLabel").text("Editar Producto");
+            $("#btn_grabar").html("<i class='fas fa-save'></i> Guardar cambios");
+        } else {
+            $("#codigo_producto").prop("readonly", false);
+            $("#form_producto")[0].reset();
+            $("#FormularioLabel").text("Registrar Producto");
+            $("#btn_grabar").html("<i class='fas fa-save'></i> Guardar datos");
+        }
+        $("#Formulario").modal("show");
+    }
+
+    $("#btn_grabar").click(function () {
+        var producto = {
+            codigo_producto: $("#codigo_producto").val(),
+            producto: $("#producto").val(),
+            talla: $("#talla").val(),
+            stock_disponible: $("#stock_disponible").val(),
+            costo: $("#costo").val(),
+            ganancia: $("#ganancia").val(),
+            codigo_categoria: $("#codigo_categoria").val()
+        };
+
+        $.ajax({
+            url: "@Url.Action("Grabar", "Producto")",
+            type: "POST",
+            data: JSON.stringify(producto),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data.resultado) {
+                    $("#ar_producto").DataTable().ajax.reload();
+                    $("#Formulario").modal("hide");
+                } else {
+                    alert("No fue posible grabar la información");
+                }
+            },
+            error: function (error) {
+                alert(error.responseText);
+            }
+        });
+    });
+
+    function Eliminar(codigo_producto) {
+        if (confirm("¿Seguro de eliminar?")) {
+            $.ajax({
+                url: "@Url.Action("Borrar", "Producto")" + "?codigo_producto=" + codigo_producto,
+                type: "GET",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    if (data.resultado) {
+                        $("#ar_producto").DataTable().ajax.reload();
+                    } else {
+                        alert("No fue posible eliminar la información");
+                    }
+                },
+                error: function (error) {
+                    alert(error.responseText);
+                }
+            });
+        }
+    }
+</script>
+
+   
