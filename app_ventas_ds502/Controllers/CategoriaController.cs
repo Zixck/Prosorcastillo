@@ -2,7 +2,6 @@ using app_ventas_ds502.Data;
 using app_ventas_ds502.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using Microsoft.AspNetCore.Mvc.RazorPages.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace app_ventas_ds502.Controllers
@@ -24,7 +23,7 @@ namespace app_ventas_ds502.Controllers
         [HttpGet]
         public JsonResult Listar()
         {
-            string cad_sql = "exec sp_ListarCategoria";
+            string cad_sql = "exec sp_ListarCategorias";
             List<Categoria> arr_categoria = _context.Categorias.FromSqlRaw(cad_sql).ToList();
             return Json(new { data = arr_categoria });
         }
@@ -32,7 +31,7 @@ namespace app_ventas_ds502.Controllers
         [HttpGet]
         public JsonResult Consultar(string codigo_categoria)
         {
-            string cad_sql = "sp_ConsultarCategoria";
+            string cad_sql = "exec sp_ConsultarCategoria @codigo_categoria";
             Categoria categoria = _context.Categorias.FromSqlRaw(cad_sql, new SqlParameter("@codigo_categoria", codigo_categoria)).FirstOrDefault();
             return Json(categoria);
         }
@@ -44,7 +43,7 @@ namespace app_ventas_ds502.Controllers
 
             try
             {
-                Categoria tmp_categoria = _context.Categorias.FirstOrDefault(cat => cat.codigo_categoria == categoria.codigo_categoria);
+                Categoria tmp_categoria = _context.Categorias.FirstOrDefault(c => c.codigo_categoria == categoria.codigo_categoria);
                 if (tmp_categoria == null)
                 {
                     _context.Categorias.Add(categoria);
@@ -69,7 +68,7 @@ namespace app_ventas_ds502.Controllers
             bool rpta = true;
             try
             {
-                Categoria categoria = _context.Categorias.FirstOrDefault(cat => cat.codigo_categoria == codigo_categoria);
+                Categoria categoria = _context.Categorias.FirstOrDefault(c => c.codigo_categoria == codigo_categoria);
                 if (categoria != null)
                 {
                     _context.Categorias.Remove(categoria);
