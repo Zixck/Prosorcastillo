@@ -17,8 +17,8 @@
         <table id="ar_categoria" class="table table-striped display" style="width:100%">
             <thead>
                 <tr>
-                    <th>@Html.DisplayNameFor(cat => cat.codigo_categoria)</th>
-                    <th>@Html.DisplayNameFor(cat => cat.categoria)</th>
+                    <th>@Html.DisplayNameFor(model => model.codigo_categoria)</th>
+                    <th>@Html.DisplayNameFor(model => model.categoria)</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -64,7 +64,6 @@
 @section Scripts {
     <script src="~/lib/jquery/jquery.js"></script>
     <script src="~/lib/datatables.net/js/jquery.dataTables.js"></script>
-    <script src="~/lib/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -174,4 +173,3 @@
         }
     </script>
 }
-
